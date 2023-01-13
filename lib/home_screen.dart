@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timestamp/Monatliste.dart';
+import 'package:timestamp/Sick.dart';
 import 'package:timestamp/loginscreen.dart';
 import 'package:timestamp/registrationscreen.dart';
 import 'DachCalender.dart';
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _displayScreen2 = 1;
         break;
       case 6:
-        screen1 = Zeitausgleich();
+        screen1 = Sick();
         _displayScreen2 = 1;
         break;
       case 7:

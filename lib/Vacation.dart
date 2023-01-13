@@ -10,23 +10,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timestamp/Calculate.dart';
 import 'package:week_of_year/week_of_year.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 int _year = DateTime.now().year;
 String _allbalnce = '0';
-
+String _holidays = '0';
+String _holidaysrest = '0';
+String _consum = '0';
 class Vacation extends StatefulWidget {
   const Vacation({super.key});
   @override
   State<Vacation> createState() => _Vacation();
 }
-
 class _Vacation extends State<Vacation> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     DateTimeRange? dateRange =
@@ -53,8 +52,7 @@ class _Vacation extends State<Vacation> {
                 List holidays = data['holidays'];
                 List competime = ['2000-01-01'];
                 competime.addAll(data['comptime']);
-                List vacation = ['2000-01-01'];
-                vacation.addAll(data['vacation']);
+                List vacation=data['vacation'];
                 List sick = ['2000-01-01'];
                 sick.addAll(data['sick']);
                 List start = [];
@@ -75,10 +73,13 @@ class _Vacation extends State<Vacation> {
                 for (int i = 1; i < 13; i++) {
                   _balance.add(Calculate().getvacation(vacation, i, _year));
                 }
-                _allbalnce = Calculate().doubleToTimeString(Calculate()
-                        .convertTimeToDouble(Calculate().getJobHour(stamp)) -
-                    Calculate().getAllTargetTime(days, holidays, start, end,
-                        workingHours, workingDays, competime, vacation, sick));
+                _holidays = (Calculate().getHolidays(start, end, workingDays))
+                    .toStringAsFixed(2);
+                _holidaysrest =
+                    (Calculate().getHolidays(start, end, workingDays) -
+                            vacation.length)
+                        .toStringAsFixed(2);
+                _consum = vacation.length.toString();
                 @override
                 List<_StundenData> datas = [
                   _StundenData('Jänner', _balance[0]),
@@ -99,7 +100,9 @@ class _Vacation extends State<Vacation> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Wrap(spacing: 100, children: [
+                        Wrap(spacing: 50,runSpacing: 20,
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center, children: [
                           Container(
                             width: 160,
                             height: 160,
@@ -113,17 +116,80 @@ class _Vacation extends State<Vacation> {
                                 radius: 55.0,
                                 lineWidth: 10.0,
                                 percent: 1,
-                                header: new Text("Urlaubs \n"),
+                                header: new Text("Gesamt \n"),
                                 center: new ListView(
                                   padding: EdgeInsets.all(20),
                                   children: [
                                     new Icon(
-                                      Icons.work_history,
-                                      size: 30.0,
-                                      color: Colors.blueAccent.withOpacity(0.5),
+                                      Icons.holiday_village,
                                     ),
                                     Text(
-                                      "$_allbalnce \n Stunden",
+                                      "$_holidays \n Tage",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                                backgroundColor: Colors.grey,
+                                progressColor:
+                                    Colors.blueAccent.withOpacity(0.5),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 160,
+                            height: 160,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(24.0),
+                              color: Color.fromARGB(80, 43, 181, 216)
+                                  .withOpacity(0.1),
+                            ),
+                            child: Center(
+                              child: CircularPercentIndicator(
+                                radius: 55.0,
+                                lineWidth: 10.0,
+                                percent: (double.parse(_consum)/double.parse(_holidays)),
+                                header: new Text("Verbrauch \n"),
+                                center: new ListView(
+                                  padding: EdgeInsets.all(20),
+                                  children: [
+                                    new Icon(
+                                      Icons.beach_access,
+                                      color: Colors.grey,
+                                    ),
+                                    Text(
+                                      "$_consum \n Tage",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                                backgroundColor: Colors.grey,
+                                progressColor:
+                                    Colors.blueAccent.withOpacity(0.5),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 160,
+                            height: 160,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(24.0),
+                              color: Color.fromARGB(80, 43, 181, 216)
+                                  .withOpacity(0.1),
+                            ),
+                            child: Center(
+                              child: CircularPercentIndicator(
+                                radius: 55.0,
+                                lineWidth: 10.0,
+                                percent: 1-(double.parse(_consum)/double.parse(_holidays)),
+                                header: new Text("Rest \n"),
+                                center: new ListView(
+                                  padding: EdgeInsets.all(20),
+                                  children: [
+                                    new Icon(
+                                      Icons.beach_access,
+                                    ),
+                                    Text(
+                                      "$_holidaysrest \n Tage",
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -269,7 +335,6 @@ class _Vacation extends State<Vacation> {
             }));
   }
 }
-
 class _StundenData {
   _StundenData(this.year, this.sales);
   final String year;

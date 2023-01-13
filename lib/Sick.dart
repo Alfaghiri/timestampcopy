@@ -10,23 +10,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timestamp/Calculate.dart';
 import 'package:week_of_year/week_of_year.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 int _year = DateTime.now().year;
 String _allbalnce = '0';
-
-class Vacation extends StatefulWidget {
-  const Vacation({super.key});
+class Sick extends StatefulWidget {
+  const Sick({super.key});
   @override
-  State<Vacation> createState() => _Vacation();
+  State<Sick> createState() => _Sick();
 }
-
-class _Vacation extends State<Vacation> {
+class _Sick extends State<Sick> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     DateTimeRange? dateRange =
@@ -73,12 +69,9 @@ class _Vacation extends State<Vacation> {
                 List<double> _circulerpercent = [];
                 List<double> _balance = [];
                 for (int i = 1; i < 13; i++) {
-                  _balance.add(Calculate().getvacation(vacation, i, _year));
+                  _balance.add(Calculate().getvacation(sick, i, _year));
                 }
-                _allbalnce = Calculate().doubleToTimeString(Calculate()
-                        .convertTimeToDouble(Calculate().getJobHour(stamp)) -
-                    Calculate().getAllTargetTime(days, holidays, start, end,
-                        workingHours, workingDays, competime, vacation, sick));
+                _allbalnce = (sick.length-1).toString() ;
                 @override
                 List<_StundenData> datas = [
                   _StundenData('Jänner', _balance[0]),
@@ -113,24 +106,22 @@ class _Vacation extends State<Vacation> {
                                 radius: 55.0,
                                 lineWidth: 10.0,
                                 percent: 1,
-                                header: new Text("Urlaubs \n"),
+                                header: new Text("Krank \n"),
                                 center: new ListView(
                                   padding: EdgeInsets.all(20),
                                   children: [
                                     new Icon(
-                                      Icons.work_history,
-                                      size: 30.0,
-                                      color: Colors.blueAccent.withOpacity(0.5),
+                                      Icons.sick,
                                     ),
                                     Text(
-                                      "$_allbalnce \n Stunden",
+                                      "$_allbalnce \n Tage",
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
                                 ),
                                 backgroundColor: Colors.grey,
                                 progressColor:
-                                    Colors.blueAccent.withOpacity(0.5),
+                                   Color.fromARGB(255, 243, 11, 3).withOpacity(0.5),
                               ),
                             ),
                           ),
@@ -170,7 +161,7 @@ class _Vacation extends State<Vacation> {
                             primaryXAxis:
                                 CategoryAxis(title: AxisTitle(text: "")),
                             primaryYAxis:
-                                CategoryAxis(title: AxisTitle(text: "Stunden")),
+                                CategoryAxis(title: AxisTitle(text: "Tage")),
                             legend: Legend(isVisible: false),
                             plotAreaBackgroundColor:
                                 Color.fromARGB(0, 96, 125, 139),
@@ -204,7 +195,7 @@ class _Vacation extends State<Vacation> {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Text(
-                                "Urlaubs beantragen",
+                                "Krank beantragen",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -248,7 +239,7 @@ class _Vacation extends State<Vacation> {
                                         .collection('users')
                                         .doc(user!.uid)
                                         .update({
-                                      'vacation': FieldValue.arrayUnion(
+                                      'sick': FieldValue.arrayUnion(
                                           Calculate().getcomptime(days,
                                               holidays, _startrange, _endrange))
                                     });
@@ -269,7 +260,6 @@ class _Vacation extends State<Vacation> {
             }));
   }
 }
-
 class _StundenData {
   _StundenData(this.year, this.sales);
   final String year;
