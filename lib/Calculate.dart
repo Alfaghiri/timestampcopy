@@ -1,5 +1,6 @@
 import 'package:week_of_year/week_of_year.dart';
 import 'package:intl/intl.dart';
+
 class Calculate {
 //berechnet die Dauer zwischen zwei Daten und Zeiten im Format "hh:mm"
   String getDuration(String startTime, String endTime) {
@@ -12,6 +13,7 @@ class Calculate {
         difference.inMinutes.remainder(60).toString().padLeft(2, '0');
     return hours + ":" + minutes;
   }
+
 //gibt den Wochentag für ein bestimmtes Datum und eine bestimmte Uhrzeit im
 //format 'Montag' 'Dienstag'
   String getDayOfWeek(String time) {
@@ -36,10 +38,23 @@ class Calculate {
         return 'Unknown';
     }
   }
+
+  double getvacation(List vacatin, int month, int year) {
+    double days = 0;
+    for (int i = 0; i < vacatin.length; i++) {
+      DateTime vac = DateTime.parse(vacatin[i]);
+      if (vac.month == month && vac.year == year) {
+        days++;
+      }
+    }
+    return days;
+  }
+
 //wandelt eine doppelt genaue Zahl in eine Zahl mit zwei Dezimalstellen um.
   double toDoubleWithTwoDecimal(double value) {
     return double.parse(value.toStringAsFixed(2));
   }
+
 // gibt eine Liste mit Zeitstempeln zurück, die im angegebenen Monat und
 //Jahr liegen.
   List<String> getMonth(List stamps, String? Month, String? year) {
@@ -51,16 +66,19 @@ class Calculate {
     }
     return items;
   }
+
 //gibt die Wochennummer im Jahr für ein bestimmtes Datum und eine bestimmte
 //Uhrzeit zurück.
   String getWeek(String time) {
     DateTime times = DateTime.parse(time);
     return times.weekOfYear.toString();
   }
+
 //gibt nur die Stunden im Format "HH:mm" einer Zeit zurück.
   String getHour(String time) {
     return time.substring(10, 16);
   }
+
 //gibt das Datum im Format "dd.MM.yyyy" für eine gegebene Zeit zurück.
   String getDate(String time) {
     String day = time.substring(8, 10);
@@ -68,11 +86,13 @@ class Calculate {
     String year = time.substring(0, 4);
     return day + "." + month + "." + year;
   }
+
 //gibt die Uhrzeit im Format "HH:mm" einer gegebenen Zeit zurück.
   String getTime(String time) {
     String newtime = time.substring(11, 16);
     return newtime;
   }
+
   List<String> dateTimeListToStringList(List<DateTime> dateTimes) {
     List<String> stringList = [];
     for (DateTime dateTime in dateTimes) {
@@ -80,6 +100,7 @@ class Calculate {
     }
     return stringList;
   }
+
 //berechnet die Dauer in Tagen zwischen zwei Daten und Zeiten.
   int getDurationinDays(String start, String end) {
     DateTime startDate = DateTime.parse(start);
@@ -88,6 +109,7 @@ class Calculate {
     int days = duration.inDays;
     return days;
   }
+
 //gibt eine Liste von DateTime-Objekten zurück, die zwischen zwei Daten und
 //Zeiten liegen, die als Strings im Format "yyyy-MM-dd HH:mm:ss"
 //übergeben werden.
@@ -102,6 +124,7 @@ class Calculate {
     }
     return newstamps;
   }
+
 //gibt eine Liste von DateTime-Objekten für jeden Tag zwischen zwei Daten und
 //Zeiten zurück, die als Strings im Format "yyyy-MM-dd HH:mm:ss" übergeben
 //werden.
@@ -114,6 +137,7 @@ class Calculate {
     }
     return days;
   }
+
 //gibt eine Liste von DateTime-Objekten für jeden Tag im angegebenen Monat
 //und Jahr zurück.
   List<DateTime> daysInMonth(int month, int year) {
@@ -128,6 +152,7 @@ class Calculate {
     daysInMonth.add(currentDay);
     return daysInMonth;
   }
+
 //wird verwendet, um einen String von Tagen im Format "Mo, Tu, We, Th, Fr, Sa,
 //Su" in eine Liste von Integers zu konvertieren, wo jeder Integer den
 //Wochentag darstellt.
@@ -161,6 +186,7 @@ class Calculate {
     }
     return newlist;
   }
+
 //gibt das Datum im Format "yyyy-MM-dd" für einen bestimmten Wochentag
 //(angegeben als Integer) in einer bestimmten Woche (angegeben als Integer)
 //und Jahr (angegeben als Integer) zurück.
@@ -171,6 +197,7 @@ class Calculate {
         firstDayOfFirstWeek.add(Duration(days: (week - 1) * 7 + (day - 1)));
     return "${specifiedWeek.year.toString().padLeft(4, '0')}-${specifiedWeek.month.toString().padLeft(2, '0')}-${specifiedWeek.day.toString().padLeft(2, '0')}";
   }
+
 //berechnet die Dauer in Stunden zwischen zwei Daten und Zeiten in einer Liste
 //von Zeitstempeln für einen bestimmten Tag einer bestimmten Woche und Jahr.
   double getHoursDay(List stamp, int day, int week, int year) {
@@ -187,6 +214,7 @@ class Calculate {
       return 0;
     }
   }
+
   //gibt eine Liste von DateTime-Objekten für bestimmte Wochentage in einem
   //bestimmten Datumsbereich zurück, wobei Feiertage von der Liste entfernt
   //werden.
@@ -210,6 +238,7 @@ class Calculate {
     List<DateTime> newweekdays = removeHolidays(weekdays, holidays);
     return newweekdays;
   }
+
   List<DateTime> jobsdays(String days, DateTime start, DateTime end,
       List holidays, List comptime, List vacation, List sick) {
     var weekdays = <DateTime>[];
@@ -229,6 +258,7 @@ class Calculate {
     List<DateTime> n3 = removeHolidays(n2, sick);
     return n3;
   }
+
 // prüft, ob das aktuelle Datum und die Uhrzeit innerhalb eines bestimmten
 //Datumsbereichs liegen.
   bool isDateInRange(String startDate, String endDate) {
@@ -237,6 +267,7 @@ class Calculate {
     DateTime end = DateTime.parse(endDate);
     return dateTime.isAfter(start) && dateTime.isBefore(end);
   }
+
 //gibt die Arbeitszeit für den aktuellen Datumsbereich zurück.
   String getRootTime(List start, List end, List<int> wHours) {
     String _rootTime = "";
@@ -247,6 +278,7 @@ class Calculate {
     }
     return _rootTime;
   }
+
 //konvertiert eine Liste von Datumsangaben im Format "yyyy-MM-dd" in eine
 //Liste von DateTime-Objekten.
   List<DateTime> getDatesFromStringList(List dateStrings) {
@@ -259,11 +291,13 @@ class Calculate {
     }
     return dateList;
   }
+
 // entfernt Feiertage aus einer Liste von Daten.
   List<DateTime> removeHolidays(List<DateTime> dates, List holidays) {
     List<DateTime> newlist = getDatesFromStringList(holidays);
     return dates.where((date) => !newlist.contains(date)).toList();
   }
+
 //berechnet die geplante Arbeitszeit für einen bestimmten Monat und Jahr.
   double getTargetTime(
       List day,
@@ -299,6 +333,7 @@ class Calculate {
     }
     return days;
   }
+
   List<String> getcomptime(
     List day,
     List holidays,
@@ -313,6 +348,7 @@ class Calculate {
     }
     return newlist;
   }
+
 //berechnet die geplante Arbeitszeit für den Zeitraum zwischen dem aktuellen
 //Datum und einem vorher definierten Datum.
   double getAllTargetTime(
@@ -346,6 +382,7 @@ class Calculate {
     }
     return days;
   }
+
 // berechnet die Anzahl der Arbeitsstunden, die auf Feiertagen geleistet werden.
   double getHolidays(List start, List end, List<int> workingDays) {
     double holidays = 0;
@@ -355,6 +392,7 @@ class Calculate {
     }
     return holidays;
   }
+
 //nimmt eine Liste mit Zeitstempeln als Argument und berechnet die Gesamtdauer
 //der Arbeitszeit, indem sie die Dauer zwischen jedem ungeraden und dem
 //davorliegenden geraden Zeitstempel berechnet und diese Dauern in einer Liste
@@ -385,6 +423,7 @@ class Calculate {
         ":" +
         min.toString().padLeft(2, '0');
   }
+
 //
   double convertTimeToDouble(String time) {
     List<String> timeParts = time.split(':');
@@ -392,6 +431,7 @@ class Calculate {
     int minutes = int.parse(timeParts[1]);
     return hours + (minutes / 60);
   }
+
   String doubleToTimeString(double time) {
     if (time >= 0) {
       int hours = time.floor();

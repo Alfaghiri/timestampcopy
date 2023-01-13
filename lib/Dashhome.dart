@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week_of_year/week_of_year.dart';
 import 'dart:async';
+
 String? _monthvalue = DateTime.now().month.toString();
 String? _yearvalue = DateTime.now().year.toString();
 String _holidays = '0';
@@ -19,17 +20,20 @@ String _targettime = '0';
 String _balanceperiod = '0';
 String __alltargettime = '0';
 String _sick = '0';
+
 class Dashhome extends StatefulWidget {
   const Dashhome({super.key});
   @override
   State<Dashhome> createState() => _DashhomeState();
 }
+
 class _DashhomeState extends State<Dashhome> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
   }
+
   double _wrapspacing = 50;
   double _containerwidth = 180;
   double _containerheight = 180;
@@ -120,8 +124,8 @@ class _DashhomeState extends State<Dashhome> {
               competime.addAll(data['comptime']);
               List vacation = ['2000-01-01'];
               vacation.addAll(data['vacation']);
-              List sick = ['2000-01-01'];
-              sick.addAll(data['sick']);
+              print(vacation);
+              List sick = data['sick'];
               List start = [];
               List end = [];
               List days = [];
@@ -170,9 +174,9 @@ class _DashhomeState extends State<Dashhome> {
                       .convertTimeToDouble(Calculate().getJobHour(stamp)) -
                   Calculate().getAllTargetTime(days, holidays, start, end,
                       workingHours, workingDays, competime, vacation, sick));
-              _sick = data['krank'];
-              _holidays = Calculate()
-                  .getHolidays(start, end, workingDays)
+              _sick = (sick.length).toString();
+              _holidays = (Calculate().getHolidays(start, end, workingDays)-
+                      vacation.length)
                   .toStringAsFixed(2);
               _stunden.add(_roottime + _stundenn[0]);
               _stunden.add(_jobhour + _stundenn[0]);
@@ -190,7 +194,8 @@ class _DashhomeState extends State<Dashhome> {
               _circulerpercent
                   .add(Calculate().convertTimeToDouble(__alltargettime) / 100);
               _circulerpercent.add(1);
-              _circulerpercent.add(0.5);
+              _circulerpercent.add(1- vacation.length/(Calculate().getHolidays(start, end, workingDays)
+                     ));
               List<_StundenData> datas = [
                 _StundenData(
                     'MO',
@@ -353,6 +358,7 @@ class _DashhomeState extends State<Dashhome> {
     ));
   }
 }
+
 class _StundenData {
   _StundenData(this.year, this.sales);
   final String year;

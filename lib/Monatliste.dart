@@ -101,8 +101,7 @@ class _Monatliste extends State<Monatliste> {
             workingDays.add(contracts[(i + 1).toString()]['workingDays']);
             workingHours.add(contracts[(i + 1).toString()]['workingHours']);
           }
-          _holidays =
-              Calculate().getHolidays(start, end, workingDays).toString();
+         
           List items =
               Calculate().getMonth(data['stamps'], _monthvalue, _yearvalue);
           return Center(
