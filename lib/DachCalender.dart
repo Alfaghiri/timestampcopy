@@ -70,16 +70,31 @@ class _DashCalender extends State<DashCalender> {
             }
             final List<Meeting> meetings = <Meeting>[];
             for (int i = 0; i < stamps.length; i++) {
-              if (i % 2 == 0) {
-                String start = Calculate().getTime(stamps[i]);
-                String end = Calculate().getTime(stamps[i + 1]);
-                meetings.add(Meeting(
-                    '$start -- $end',
-                    DateTime.parse(stamps[i]),
-                    DateTime.parse(stamps[i + 1]),
-                    Color.fromARGB(255, 86, 181, 219),
-                    false));
-              }
+                if (i % 2 == 0) {
+                   if(i<stamps.length-1){
+                  String start = Calculate().getTime(stamps[i]);
+                  String end = Calculate().getTime(stamps[i + 1]);
+                  meetings.add(Meeting(
+                      '$start -- $end',
+                      DateTime.parse(stamps[i]),
+                      DateTime.parse(stamps[i + 1]),
+                      Color.fromARGB(255, 86, 181, 219),
+                      false));
+                  }
+                  else{
+                  String start = Calculate().getTime(stamps[i]);
+                  String end = Calculate().getTime(stamps[i]);
+                  meetings.add(Meeting(
+                      '$start -- 00:00',
+                      DateTime.parse(stamps[i]),
+                      DateTime.parse(stamps[i].toString().substring(0,10)),
+                      Color.fromARGB(255, 86, 181, 219),
+                      false));
+                  }
+
+                 
+                }
+              
             }
             for (int i = 0; i < holidays.length; i++) {
               DateTime _startdate =

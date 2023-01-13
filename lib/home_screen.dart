@@ -15,7 +15,7 @@ import 'header.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-int selectedmenu = 5;
+int selectedmenu = 0;
 int _selectedIndex = 0;
 int _displayScreen2 = 0;
 Widget screen1 = Dashhome();
@@ -89,8 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _displayScreen2 = 0;
         break;
       case 2:
-        screen1 = Dashhome();
-        _displayScreen2 = 0;
+        screen1 = DashDiagram();
+        _displayScreen2 = 1;
         break;
       case 3:
         screen1 = Zeitausgleich();

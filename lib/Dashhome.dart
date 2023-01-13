@@ -118,9 +118,7 @@ class _DashhomeState extends State<Dashhome> {
               List holidays = data['holidays'];
               List competime = ['2000-01-01'];
               competime.addAll(data['comptime']);
-              List vacation = ['2000-01-01'];
-              vacation.addAll(data['vacation']);
-              print(vacation);
+              List vacation = data['vacation'];
               List sick = data['sick'];
               List start = [];
               List end = [];
@@ -171,7 +169,7 @@ class _DashhomeState extends State<Dashhome> {
                   Calculate().getAllTargetTime(days, holidays, start, end,
                       workingHours, workingDays, competime, vacation, sick));
               _sick = (sick.length).toString();
-              _holidays = (Calculate().getHolidays(start, end, workingDays)-
+              _holidays = (Calculate().getHolidays(start, end, workingDays) -
                       vacation.length)
                   .toStringAsFixed(2);
               _stunden.add(_roottime + _stundenn[0]);
@@ -190,8 +188,9 @@ class _DashhomeState extends State<Dashhome> {
               _circulerpercent
                   .add(Calculate().convertTimeToDouble(__alltargettime) / 100);
               _circulerpercent.add(1);
-              _circulerpercent.add(1- vacation.length/(Calculate().getHolidays(start, end, workingDays)
-                     ));
+              _circulerpercent.add(1 -
+                  vacation.length /
+                      (Calculate().getHolidays(start, end, workingDays)));
               List<_StundenData> datas = [
                 _StundenData(
                     'MO',

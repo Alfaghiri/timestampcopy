@@ -39,6 +39,37 @@ class Calculate {
     }
   }
 
+  String getmonthname(int month) {
+    switch (month) {
+      case 1:
+        return 'Jänner';
+      case 2:
+        return 'Februar';
+      case 3:
+        return 'März';
+      case 4:
+        return 'April';
+      case 5:
+        return 'Mai';
+      case 6:
+        return 'Juni';
+      case 7:
+        return 'Juli';
+      case 8:
+        return 'August';
+      case 9:
+        return 'September';
+      case 10:
+        return 'Oktober';
+      case 11:
+        return 'November';
+      case 12:
+        return 'Dezember';
+      default:
+        return 'Unknown';
+    }
+  }
+
   double getvacation(List vacatin, int month, int year) {
     double days = 0;
     for (int i = 0; i < vacatin.length; i++) {
@@ -153,6 +184,20 @@ class Calculate {
     return daysInMonth;
   }
 
+  List<int> getWeeksOfMonth(int month, int year) {
+    var firstDayOfMonth = DateTime(year, month);
+    var lastDayOfMonth = DateTime(year, month + 1, 0);
+    var currentDay = firstDayOfMonth;
+    var weeks = <int>[];
+    while (currentDay.month == month) {
+      if (!weeks.contains(currentDay.weekOfYear)) {
+        weeks.add(currentDay.weekOfYear);
+      }
+      currentDay = currentDay.add(Duration(days: 1));
+    }
+    return weeks;
+  }
+
 //wird verwendet, um einen String von Tagen im Format "Mo, Tu, We, Th, Fr, Sa,
 //Su" in eine Liste von Integers zu konvertieren, wo jeder Integer den
 //Wochentag darstellt.
@@ -213,6 +258,29 @@ class Calculate {
     } else {
       return 0;
     }
+  }
+
+  String getMonthFromWeekNumberAndYear(int week, int year) {
+    DateTime firstDayOfFirstWeek =
+        DateTime(year).subtract(Duration(days: DateTime(year).weekday - 1));
+    DateTime specifiedWeek =
+        firstDayOfFirstWeek.add(Duration(days: (week - 1) * 7));
+    return specifiedWeek.month.toString();
+  }
+
+  int getWeekNumber(int weekNum, int month, int year) {
+    DateTime date = DateTime(year, month);
+    int weekOfMonth = 1;
+    while (date.month == month) {
+      if (date.weekday == DateTime.monday) {
+        if (weekOfMonth == weekNum) {
+          return date.weekday;
+        }
+        weekOfMonth++;
+      }
+      date = date.add(Duration(days: 1));
+    }
+    return -1;
   }
 
   //gibt eine Liste von DateTime-Objekten für bestimmte Wochentage in einem
