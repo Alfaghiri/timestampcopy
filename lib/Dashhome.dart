@@ -78,7 +78,7 @@ class _DashhomeState extends State<Dashhome> {
       "\nStunden",
       "\nTage",
     ];
-    if (Responsive.isMobile(context)) {
+/*     if (Responsive.isMobile(context)) {
       setState(() {
         _wrapspacing = 10;
         _containerwidth = 130;
@@ -93,7 +93,7 @@ class _DashhomeState extends State<Dashhome> {
         _mainAxisSpacing = 5;
         double _circulerheight = 10;
       });
-    }
+    } */
     return Center(
         child: SingleChildScrollView(
       child: Container(

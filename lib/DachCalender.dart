@@ -8,11 +8,13 @@ import 'package:timestamp/Calculate.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'package:timestamp/home_screen.dart';
 import 'package:timestamp/responsive.dart';
+
 class DashCalender extends StatefulWidget {
   const DashCalender({super.key});
   @override
   State<DashCalender> createState() => _DashCalender();
 }
+
 class _DashCalender extends State<DashCalender> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
@@ -20,6 +22,7 @@ class _DashCalender extends State<DashCalender> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     double _timeIntervalHeight = MediaQuery.of(context).size.height / 10;
@@ -93,25 +96,26 @@ class _DashCalender extends State<DashCalender> {
               DateTime _enddate =
                   DateTime.parse(competime[i]).add(Duration(hours: 23));
               meetings.add(Meeting('Zeitausgleich', _startdate, _enddate,
-                  Color.fromARGB(255, 7, 190, 160), false));
+                  Color.fromARGB(255, 7, 190, 160), true));
             }
             for (int i = 0; i < vacation.length; i++) {
               DateTime _startdate = DateTime.parse(vacation[i]);
               DateTime _enddate =
                   DateTime.parse(vacation[i]).add(Duration(hours: 23));
               meetings.add(Meeting('Urlaub', _startdate, _enddate,
-                  Color.fromARGB(216, 36, 8, 194), false));
+                  Color.fromARGB(216, 36, 8, 194), true));
             }
             for (int i = 0; i < sick.length; i++) {
               DateTime _startdate = DateTime.parse(sick[i]);
               DateTime _enddate =
                   DateTime.parse(sick[i]).add(Duration(hours: 23));
               meetings.add(Meeting('Krank', _startdate, _enddate,
-                  Color.fromARGB(215, 226, 65, 65), false));
+                  Color.fromARGB(215, 226, 65, 65), true));
             }
             List<Meeting> _getDataSource() {
               return meetings;
             }
+
             return Container(
                 height: _containerheight,
                 padding: EdgeInsets.only(
@@ -134,7 +138,9 @@ class _DashCalender extends State<DashCalender> {
                         MonthAppointmentDisplayMode.appointment,
                   ),
                   timeSlotViewSettings: TimeSlotViewSettings(
-                      timeInterval: Duration(hours: 3),
+                      startHour: 3,
+                      endHour: 18,
+                      timeInterval: Duration(hours: 2),
                       timeIntervalHeight: _timeIntervalHeight),
                 ));
           } else {
@@ -146,11 +152,13 @@ class _DashCalender extends State<DashCalender> {
           }
         });
   }
+
   String _getDatumFormat(DateTime d) {
     String newDatum = d.toString().substring(10).substring(1, 6);
     return newDatum;
   }
 }
+
 class MeetingDataSource extends CalendarDataSource {
   /// Creates a meeting data source, which used to set the appointment
   /// collection to the calendar
@@ -161,22 +169,27 @@ class MeetingDataSource extends CalendarDataSource {
   DateTime getStartTime(int index) {
     return _getMeetingData(index).from;
   }
+
   @override
   DateTime getEndTime(int index) {
     return _getMeetingData(index).to;
   }
+
   @override
   String getSubject(int index) {
     return _getMeetingData(index).eventName;
   }
+
   @override
   Color getColor(int index) {
     return _getMeetingData(index).background;
   }
+
   @override
   bool isAllDay(int index) {
     return _getMeetingData(index).isAllDay;
   }
+
   Meeting _getMeetingData(int index) {
     final dynamic meeting = appointments![index];
     late final Meeting meetingData;
@@ -186,17 +199,23 @@ class MeetingDataSource extends CalendarDataSource {
     return meetingData;
   }
 }
+
 class Meeting {
   /// Creates a meeting class with required details.
   Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
+
   /// Event name which is equivalent to subject property of [Appointment].
   String eventName;
+
   /// From which is equivalent to start time property of [Appointment].
   DateTime from;
+
   /// To which is equivalent to end time property of [Appointment].
   DateTime to;
+
   /// Background which is equivalent to color property of [Appointment].
   Color background;
+
   /// IsAllDay which is equivalent to isAllDay property of [Appointment].
   bool isAllDay;
 }
