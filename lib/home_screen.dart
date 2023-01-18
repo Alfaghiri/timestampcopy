@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timestamp/HelpAndSupport.dart';
 import 'package:timestamp/Monatliste.dart';
 import 'package:timestamp/Sick.dart';
 import 'package:timestamp/loginscreen.dart';
@@ -15,17 +16,20 @@ import 'header.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 int selectedmenu = 0;
 int _selectedIndex = 0;
 int _displayScreen2 = 0;
 Widget screen1 = Dashhome();
 Widget screen2 = DashDiagram();
-String _currentTheme = "assets/1.jpg";
+String _currentTheme = "assets/8.jpg";
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
 class _HomeScreenState extends State<HomeScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
@@ -43,22 +47,21 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
+
   List<String> _menuTitel = [
-    "Profile",
+    "Home",
     "Kalender",
     "Zeiterfassung",
     "Zeitausgleich",
-    "Homeoffice",
     "Urlaub",
     "Krank",
     "MonatListe",
   ];
   List<Icon> _menuIcon = [
-    Icon(Icons.person),
+    Icon(Icons.home),
     Icon(Icons.calendar_month),
     Icon(Icons.lock_clock),
     Icon(Icons.timer),
-    Icon(Icons.home_filled),
     Icon(Icons.holiday_village),
     Icon(Icons.sick),
     Icon(Icons.list)
@@ -97,19 +100,19 @@ class _HomeScreenState extends State<HomeScreen> {
         _displayScreen2 = 1;
         break;
       case 4:
-        screen1 = Dashhome();
-        _displayScreen2 = 0;
-        break;
-      case 5:
         screen1 = Vacation();
         _displayScreen2 = 1;
         break;
-      case 6:
+      case 5:
         screen1 = Sick();
         _displayScreen2 = 1;
         break;
-      case 7:
+      case 6:
         screen1 = Monatliste();
+        _displayScreen2 = 1;
+        break;
+      case 7:
+        screen1 = Help();
         _displayScreen2 = 1;
         break;
     }
@@ -192,6 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget sidebarr() {
     return StreamBuilder<DocumentSnapshot>(
       // Get a stream of document snapshots using the user's UID
@@ -253,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           GridView.builder(
-                            padding: EdgeInsets.all(20),
+                            padding: EdgeInsets.all(5),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 4,
@@ -295,30 +299,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Column(
                                 children: <Widget>[
                                   Divider(
-                                    height: 100,
+                                    height: 200,
                                     color: Colors.transparent,
                                   ),
                                   ListTile(
                                     leading: Icon(Icons.help),
                                     title: Text(
-                                      'Help and Feedback',
+                                      'Hilfe',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
                                     onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegistrationScreen(),
-                                        ),
-                                      );
+                                      setState(() {
+                                        selectedmenu = 7;
+                                      });
                                     },
                                   ),
                                   ListTile(
                                     leading: Icon(Icons.logout),
                                     title: Text(
-                                      'Log out',
+                                      'Abmelden',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -346,6 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
   // the logout function
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();

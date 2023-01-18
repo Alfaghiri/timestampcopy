@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week_of_year/week_of_year.dart';
 import 'dart:async';
+
 String? _monthvalue = DateTime.now().month.toString();
 String? _yearvalue = DateTime.now().year.toString();
 String _holidays = '0';
@@ -19,17 +20,20 @@ String _targettime = '0';
 String _balanceperiod = '0';
 String __alltargettime = '0';
 String _sick = '0';
+
 class Dashhome extends StatefulWidget {
   const Dashhome({super.key});
   @override
   State<Dashhome> createState() => _DashhomeState();
 }
+
 class _DashhomeState extends State<Dashhome> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
   }
+
   double _wrapspacing = 50;
   double _containerwidth = 180;
   double _containerheight = 180;
@@ -185,8 +189,13 @@ class _DashhomeState extends State<Dashhome> {
               _circulerpercent.add(Calculate().convertTimeToDouble(_jobhour) /
                   Calculate().convertTimeToDouble(_targettime));
               _circulerpercent.add(0.5);
-              _circulerpercent
-                  .add(Calculate().convertTimeToDouble(__alltargettime) / 100);
+              if (Calculate().convertTimeToDouble(__alltargettime) > 0) {
+                _circulerpercent.add(
+                    Calculate().convertTimeToDouble(__alltargettime) / 100);
+              } else {
+                _circulerpercent.add(0);
+              }
+
               _circulerpercent.add(1);
               _circulerpercent.add(1 -
                   vacation.length /
@@ -353,6 +362,7 @@ class _DashhomeState extends State<Dashhome> {
     ));
   }
 }
+
 class _StundenData {
   _StundenData(this.year, this.sales);
   final String year;
