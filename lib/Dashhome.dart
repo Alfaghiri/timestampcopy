@@ -1,3 +1,8 @@
+/* 
+ @authors:
+ Abdul Wahhab Alfaghiri Al Anzi   01524445
+ Nouzad Mohammad                  00820679
+*/
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

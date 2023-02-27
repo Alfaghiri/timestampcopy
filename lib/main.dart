@@ -1,4 +1,8 @@
-// ignore_for_file: avoid_unnecessary_containers
+/* 
+ @authors:
+ Abdul Wahhab Alfaghiri Al Anzi   01524445
+ Nouzad Mohammad                  00820679
+*/
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:timestamp/home_screen.dart';
